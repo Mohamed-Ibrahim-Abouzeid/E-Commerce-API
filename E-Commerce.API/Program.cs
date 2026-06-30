@@ -19,6 +19,8 @@ namespace E_Commerce.API
             builder.Services.AddApplicationServices();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
             app.SeedDataBaseAsync();
@@ -27,6 +29,8 @@ namespace E_Commerce.API
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
             app.UseStaticFiles(new StaticFileOptions { 
             FileProvider=new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath,"Files")),
