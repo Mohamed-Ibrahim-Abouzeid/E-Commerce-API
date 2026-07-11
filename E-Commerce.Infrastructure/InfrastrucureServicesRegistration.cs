@@ -5,6 +5,7 @@ using E_Commerce.Infrastructure.Seeding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,6 +23,12 @@ namespace E_Commerce.Infrastructure
                 );
             services.AddKeyedScoped<IDataSeeder, CatalogDataSeeder>("Catalog");
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton<IConnectionMultiplexer>(Config =>
+            {
+                return ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnection"));
+            });
+            services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddSingleton<ICasheRepository, CasheRepository>();
             return services;
         }
     }
